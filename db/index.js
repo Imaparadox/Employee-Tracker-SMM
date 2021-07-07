@@ -1,7 +1,9 @@
 const dbConnection = require('./connection');
 
-class DB {
+class DataBase {
     constructor(dbConnection) {
          this.connection = dbConnection;
-    }
-}
+    };   
+};
+
+module.exports = dbConnection
