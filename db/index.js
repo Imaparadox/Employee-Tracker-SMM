@@ -6,4 +6,4 @@ class DataBase {
     };   
 };
 
-module.exports = dbConnection
+module.exports = DataBase;
