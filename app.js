@@ -4,7 +4,6 @@ const inquirer = require('inquirer');
 const { prompt } = require('inquirer');
 const dB = require('./db');
 
-
 function mainPromptMenu() {
     let queries = [
         'View all Employees',
@@ -27,32 +26,32 @@ function mainPromptMenu() {
         ])
         .then((answer) => {
             switch (answer.choice) {
-                case 'View all Employees':
-                    viewAllEmployees();
-                    console.log(viewAllEmployees());
+                case 'View all Departments':
+                    viewAllDepartments();
                     break;
                 case 'View all Roles':
                     viewAllRoles();
                     console.log(viewAllRoles());
                     break;
-                case 'View all Departments':
-                    viewAllDepartments();
-                    break;
-                case 'Add a Employee':
-                    addEmployees();
-                    break;
-                case 'Add a Role':
-                    addRole();
+                case 'View all Employees':
+                    viewAllEmployees();
+                    console.log(viewAllEmployees());
                     break;
                 case 'Add a Department':
                     addDepartment();
                     break;
+                case 'Add a Role':
+                    addRole();
+                    break;
+                case 'Add a Employee':
+                    addEmployees();
+                    break;
                 case 'Update Employee Role':
                     updateEmployeeRole();
                     break;
-                case 'Confirm Input':
-                    confirmInput();
-                    break;
+                // case 'Confirm Input':
+                //     confirmInput();
+                //     break;
                 case "Quit":
                     break;
                 default:
@@ -61,16 +60,43 @@ function mainPromptMenu() {
         })
 };
 
-function viewAllEmployees() {
-    return this.connection.promise().query('SELECT * FROM employee')
+function viewAllDepartments() {
+    return this.connection.promise().query('SELECT * FROM department')
 };
 
 function viewAllRoles() {
     return this.connection.promise().query('SELECT * FROM role')
 };
 
-function viewAllDepartments() {
-    return this.connection.promise().query('SELECT * FROM department')
+function viewAllEmployees() {
+    return this.connection.promise().query('SELECT * FROM employee')
+};
+
+function addDepartment() {
+    return {
+        type: 'input',
+        message: `Please enter a department name.`,
+        name: 'department'
+    };
+};
+
+function addRole() {
+    return [{
+        type: 'input',
+        message: `Please enter a name for your role.`,
+        name: 'title'
+    },
+    {
+        type: 'input',
+        message: `Please enter a salary amount.`,
+        name: 'salary'
+    },
+    {
+        type: 'list',
+        message: `Please select the department this role belongs to.`,
+        name: 'department',
+        choices: []
+    }]
 };
 
 function addEmployees() {
@@ -98,33 +124,6 @@ function addEmployees() {
     }];
 };
 
-function addRole() {
-    return [{
-        type: 'input',
-        message: `Please enter a name for your role.`,
-        name: 'title'
-    },
-    {
-        type: 'input',
-        message: `Please enter a salary amount.`,
-        name: 'salary'
-    },
-    {
-        type: 'list',
-        message: `Please select the department this role belongs to.`,
-        name: 'department',
-        choices: []
-    }]
-};
-
-function addDepartment() {
-    return {
-        type: 'input',
-        message: `Please enter a department name.`,
-        name: 'department'
-    };
-};
-
 function updateEmployeeRole() {
     return [{
         type: 'list',
@@ -138,16 +137,16 @@ function updateEmployeeRole() {
     }];
 };
 
-function confirmInput() {
-    return {
-        type: "confirm",
-        message: "",
-        name: "confirm"
-    };
-};
+// function confirmInput() {
+//     return {
+//         type: "confirm",
+//         message: "",
+//         name: "confirm"
+//     };
+// };
 
 mainPromptMenu();
-console.log(mainPromptMenu());
+
 
 // get the prompts to show up in terminal and then be able to console log the answers that i choose
 //IF the answers are showing up make sure I can send them to the database.
