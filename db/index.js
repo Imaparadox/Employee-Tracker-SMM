@@ -1,9 +1,13 @@
-const dbConnection = require('./connection');
+const connection = require('./connection');
 
 class DataBase {
-    constructor(dbConnection) {
-         this.connection = dbConnection;
-    };   
+    constructor(connection) {
+        this.connection = connection;
+    };
+
+    findAllDepartment() {
+        return this.connection.promise().query('SELECT * FROM department')
+    }
 };
 
 module.exports = DataBase;
