@@ -1,8 +1,8 @@
 // const mysql = require('mysql');
+const connection = require('./db/connection');
 const cTable = require('console.table');
-const inquirer = require('inquirer');
 const { prompt } = require('inquirer');
-const dB = require('./db');
+const db = require('./db');
 
 function mainPromptMenu() {
     let queries = [
@@ -15,15 +15,14 @@ function mainPromptMenu() {
         'Update Employee Role',
         'Quit'
     ];
-    inquirer.
-        prompt([
-            {
-                type: 'list',
-                message: 'Main Menu:',
-                choices: queries,
-                name: 'choice'
-            }
-        ])
+    prompt([
+        {
+            type: 'rawlist',
+            message: 'Main Menu:',
+            choices: queries,
+            name: 'choice'
+        }
+    ])
         .then((answer) => {
             switch (answer.choice) {
                 case 'View all Departments':
@@ -61,8 +60,12 @@ function mainPromptMenu() {
 };
 
 function viewAllDepartments() {
-    return this.connection.promise().query('SELECT * FROM department')
+    db.viewAllDepartments().then(([results]) => {
+        console.log(results)
+    })
+    //THEN re run the function that asks the initial inquirer prompts 
 };
+// console.log(viewAllDepartments());
 
 function viewAllRoles() {
     return this.connection.promise().query('SELECT * FROM role')
@@ -73,6 +76,9 @@ function viewAllEmployees() {
 };
 
 function addDepartment() {
+    //use prompt to make it run inquirer
+    //THEN re run the function that asks the initial inquirer prompts 
+    //BUILD sql language in function
     return {
         type: 'input',
         message: `Please enter a department name.`,
