@@ -7,21 +7,21 @@ const { promise } = require('./db/connection');
 
 function mainPromptMenu() {
     let queries = [
-        'View all Employees',
-        'View all Roles',
         'View all Departments',
-        'Add a Employee',
-        'Add a Role',
+        'View all Roles',
+        'View all Employees',
         'Add a Department',
+        'Add a Role',
+        'Add a Employee',
         'Update Employee Role',
         'Quit'
     ];
     prompt([
         {
             type: 'rawlist',
+            name: 'choice',
             message: 'Main Menu:',
-            choices: queries,
-            name: 'choice'
+            choices: queries
         }
     ])
         .then((answer) => {
@@ -31,11 +31,9 @@ function mainPromptMenu() {
                     break;
                 case 'View all Roles':
                     viewAllRoles();
-                    console.log(viewAllRoles());
                     break;
                 case 'View all Employees':
                     viewAllEmployees();
-                    //console.log(viewAllEmployees());
                     break;
                 case 'Add a Department':
                     addDepartment();
@@ -57,24 +55,18 @@ function mainPromptMenu() {
         })
 };
 
-
 function viewAllDepartments() {
-    const departments = db.locateAllDepartments();
-    console.log(departments);
-    // db.findAllDepartments().then(([results]) => {
-    //     console.log(results)
-    // })
-    //THEN re run the function that asks the initial inquirer prompts 
-    // function getAllDepartments() {
-    //     dbConnect.query("SELECT * FROM department;",
-    //         function (err, res) {
-    //             if (err) throw err
-    //             console.table(res)
-    //             startPrompt()
-    //         })
-    // }
+    db.locateAllDepartments()
+        .then(([rows]) => {
+            let departRows = rows;
+            console.log("\n");
+            console.table(departRows);
+        })
+        .then(() => {
+            mainPromptMenu()
+        });
 };
-// console.log(viewAllDepartments());
+
 
 function viewAllRoles() {
     return this.connection.promise().query('SELECT * FROM role')
@@ -87,7 +79,6 @@ async function viewAllEmployees() {
 
 function addDepartment() {
     //use prompt to make it run inquirer
-
     //THEN re run the function that asks the initial inquirer prompts 
     //BUILD sql language in function
     prompt({
@@ -95,16 +86,12 @@ function addDepartment() {
         message: `Please enter a department name.`,
         name: 'department'
     })
-        .then((answers) => {
-            const sql = `INSERT INTO department (name)
-        VALUES (?)`
-            const result =
+
                 db.query(sql, params => {
-                    body.addDepartment()
+                    body.createDepartment()
                 })
 
         });
-
 };
 
 function addRole() {
