@@ -3,6 +3,7 @@ const connection = require('./db/connection');
 const cTable = require('console.table');
 const { prompt } = require('inquirer');
 const db = require('./db');
+const { promise } = require('./db/connection');
 
 function mainPromptMenu() {
     let queries = [
@@ -34,7 +35,7 @@ function mainPromptMenu() {
                     break;
                 case 'View all Employees':
                     viewAllEmployees();
-                    console.log(viewAllEmployees());
+                    //console.log(viewAllEmployees());
                     break;
                 case 'Add a Department':
                     addDepartment();
@@ -48,9 +49,6 @@ function mainPromptMenu() {
                 case 'Update Employee Role':
                     updateEmployeeRole();
                     break;
-                // case 'Confirm Input':
-                //     confirmInput();
-                //     break;
                 case "Quit":
                     break;
                 default:
@@ -59,11 +57,22 @@ function mainPromptMenu() {
         })
 };
 
+
 function viewAllDepartments() {
-    db.viewAllDepartments().then(([results]) => {
-        console.log(results)
-    })
+    const departments = db.locateAllDepartments();
+    console.log(departments);
+    // db.findAllDepartments().then(([results]) => {
+    //     console.log(results)
+    // })
     //THEN re run the function that asks the initial inquirer prompts 
+    // function getAllDepartments() {
+    //     dbConnect.query("SELECT * FROM department;",
+    //         function (err, res) {
+    //             if (err) throw err
+    //             console.table(res)
+    //             startPrompt()
+    //         })
+    // }
 };
 // console.log(viewAllDepartments());
 
@@ -71,23 +80,35 @@ function viewAllRoles() {
     return this.connection.promise().query('SELECT * FROM role')
 };
 
-function viewAllEmployees() {
-    return this.connection.promise().query('SELECT * FROM employee')
+async function viewAllEmployees() {
+    const employees = await db.locateAllEmployees();
+    console.table(employees);
 };
 
 function addDepartment() {
     //use prompt to make it run inquirer
+
     //THEN re run the function that asks the initial inquirer prompts 
     //BUILD sql language in function
-    return {
+    prompt({
         type: 'input',
         message: `Please enter a department name.`,
         name: 'department'
-    };
+    })
+        .then((answers) => {
+            const sql = `INSERT INTO department (name)
+        VALUES (?)`
+            const result =
+                db.query(sql, params => {
+                    body.addDepartment()
+                })
+
+        });
+
 };
 
 function addRole() {
-    return [{
+    prompt([{
         type: 'input',
         message: `Please enter a name for your role.`,
         name: 'title'
@@ -102,11 +123,11 @@ function addRole() {
         message: `Please select the department this role belongs to.`,
         name: 'department',
         choices: []
-    }]
+    }])
 };
 
 function addEmployees() {
-    return [{
+    prompt([{
         type: 'input',
         message: `Please enter employee's first name.`,
         name: 'first_name'
@@ -127,11 +148,11 @@ function addEmployees() {
         message: `Please select your employee's manager.`,
         name: 'manager',
         choices: []
-    }];
+    }]);
 };
 
 function updateEmployeeRole() {
-    return [{
+    prompt([{
         type: 'list',
         message: `Please select an employee to edit.`,
         choices: []
@@ -140,7 +161,7 @@ function updateEmployeeRole() {
         type: 'list',
         message: `Please choose a new role for your employee.`,
         choices: []
-    }];
+    }]);
 };
 
 // function confirmInput() {
