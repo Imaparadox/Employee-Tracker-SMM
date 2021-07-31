@@ -86,12 +86,16 @@ function addDepartment() {
         message: `Please enter a department name.`,
         name: 'department'
     })
-
+        .then((answers) => {
+            const sql = `INSERT INTO department (name)
+        VALUES (?)`
+            const result =
                 db.query(sql, params => {
-                    body.createDepartment()
+                    body.aDepartment()
                 })
 
         });
+
 };
 
 function addRole() {
