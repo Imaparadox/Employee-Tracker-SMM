@@ -34,7 +34,7 @@ This webpage is generated via the command-line based on user inputs.
 User must watch demo video below to access web application.
 
 ## Demo
-[video demo link] https://drive.google.com/file/d/1Pj1pw2Kcy-15O5Nzi7_VgbCBnq9mKL-a/view
+[video demo link] 
 
 ## Notes
 This challenge was particularly difficult, and I wasn't able to finish.
